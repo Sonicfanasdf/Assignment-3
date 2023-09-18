@@ -35,6 +35,7 @@ int main()
 void mainMenu()
 {
     TicTacToe ticTacToe;
+
     // Main Menu
 
     cout << endl;

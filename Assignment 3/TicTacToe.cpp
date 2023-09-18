@@ -16,11 +16,11 @@ void TicTacToe::setRow(int newRow)
 {
 	int choice = 0;
 
-	choice = inputInteger("Enter the board's row # (1..3) or 0 to forfeit: ", 0, 3);
+	choice = newRow;
 
 	switch (choice)
 	{
-	case 0: exit(1);
+	case 0: row = choice - 1;
 		break;
 	case 1: row = choice -1;
 		break;
@@ -35,14 +35,29 @@ int TicTacToe::getColumn() const
 	return column;
 }
 
-void TicTacToe::setColumn()
+void TicTacToe::setColumn(int newColumn)
 {
+	int choice = 0;
 
+	choice = newColumn;
+
+	switch (choice)
+	{
+	case 0: column = choice - 1;
+		break;
+	case 1: column = choice - 1;
+		break;
+	case 2: column = choice - 1;
+		break;
+	case 3: column = choice - 1;
+	}
 }
 
 void TicTacToe::ticTacToe()
 {
 	char currentPlayer = 'X'; // Start with player X
+	char option = '\0';
+
 	initRandom(); // Initialize random number generator
 
 	std::cout << "Tic-tac-toe (also known as Noughts and crosses or Xs and Os) is a game for two\n";
@@ -53,6 +68,9 @@ void TicTacToe::ticTacToe()
 	std::cout << "first. Time will be recorded for the fastest and the slowest game. Average time will\n";
 	std::cout << "then be calculated and displayed.\n\n";
 	std::cout << "Game begins ...\n";
+	do
+	{
+		start = std::chrono::steady_clock::now();
 
 	std::cout << "\n\n";
 	std::cout << "Tic - Tac - Toe\n";
@@ -65,39 +83,49 @@ void TicTacToe::ticTacToe()
 	std::cout << std::string(1, char(200)) << std::string(3, char(205)) << std::string(1, char(202)) << std::string(3, char(205)) << std::string(1, char(202)) << std::string(3, char(205)) << std::string(1, char(188)) << std::endl;
 	std::cout << "\n\n";
 
-	while (true) {
 
-		// Print the number of games played
-		std::cout << "Games played: " << gamesPlayed << std::endl;
+		while (true)
+		{
 
-		if (currentPlayer == 'X') {
-			makeMove(currentPlayer);
-		}
-		else {
-			computerMove(currentPlayer);
-			updateBoard();
-		}
+			
+			if (currentPlayer == 'X') {
+				makeMove(currentPlayer);
+			}
+			else {
+				computerMove(currentPlayer);
+				updateBoard();
+			}
 
-		// Check for win or draw conditions
-		if (checkWin(currentPlayer)) {
-			std::cout << (currentPlayer == 'X' ? "Human" : "Computer") << " wins!" << std::endl;
-			resetBoard();
-			gamesPlayed++;
-			system("pause");
-			break;
-		}
-		else if (checkDraw()) {
-			std::cout << "It's a draw!" << std::endl;
-			resetBoard();
-			gamesPlayed++;
-			system("pause");
-			break;
-		}
+			// Check for win or draw conditions
+			if (checkWin(currentPlayer)) {
+				std::cout << (currentPlayer == 'X' ? "Human" : "Computer") << " wins!" << std::endl;
+				resetBoard();
+				gamesPlayed++;
+				std::cout << std::endl;
+				break;
+			}
+			else if (checkDraw()) {
+				std::cout << "It's a draw!" << std::endl;
+				resetBoard();
+				gamesPlayed++;
+				std::cout << std::endl;
+				break;
+			}
 
-		// Check for win or draw conditions
-		// Switch players for the next turn
-		currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
-	}
+			// Check for win or draw conditions
+			// Switch players for the next turn
+			currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+
+
+		}
+		end = std::chrono::steady_clock::now();
+		option = inputChar("Play again ? (Y - yes or N - no)", "YN");
+	} while (option == 'Y');
+
+	gameStatistics();
+	system("pause");
+	system("cls");
+	mainMenu();
 }
 
 void TicTacToe::makeMove(char playerSymbol)
@@ -109,23 +137,25 @@ void TicTacToe::makeMove(char playerSymbol)
 
 	while (!validMove)
 	{
+		setRow(inputInteger("Enter the board's row # (1..3) or 0 to forfeit: ", 0, 3));
 		// Take player input for row and column
-		int row = inputInteger("Enter the row (1..3) or 0 to forfeit: ", -1, 3) - 1; // Adjust input to 0-based index
+		//int row = getRow();
 		if (row == -1)
 		{
 			system("cls"); mainMenu();
 		}
 
-		int col = inputInteger("Enter the column (1..3) or 0 to forfeit: ", -1, 3) - 1;
-		if (col == -1)
+		setColumn(inputInteger("Enter the board's column # (1..3) or 0 to forfeit: ", 0, 3));
+		
+		if (column == -1)
 		{
 			system("cls"); mainMenu();
 		}
 
 		// Check if the selected position is already occupied
-		if (boardUpdate[row][col] == ' ') {
+		if (boardUpdate[row][column] == ' ') {
 			// Update the board with the player's symbol
-			boardUpdate[row][col] = playerSymbol;
+			boardUpdate[row][column] = playerSymbol;
 			validMove = true;
 		}
 		else {
@@ -222,4 +252,11 @@ void TicTacToe::resetBoard()
 			boardUpdate[i][j] = ' ';
 		}
 	}
+}
+
+void TicTacToe::gameStatistics()
+{
+	// Print the number of games played
+	std::cout << "Games played: " << gamesPlayed << std::endl;
+
 }
