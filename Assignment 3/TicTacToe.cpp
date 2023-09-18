@@ -141,14 +141,21 @@ void TicTacToe::updateBoard()
 {
 	std::cout << "\n\n";
 	std::cout << "Tic - Tac - Toe\n";
-	std::cout << "|---|---|---|\n";
+	std::cout << std::string(1, char(201)) << std::string(3, char(205)) << std::string(1, char(203)) << std::string(3, char(205)) << std::string(1, char(203)) << std::string(3, char(205)) << std::string(1, char(187)) << std::endl;
 
 	for (int i = 0; i < ROW_SIZE; i++) {
-		std::cout << "| ";
+		std::cout << std::string(1, char(186));
 		for (int j = 0; j < COL_SIZE; j++) {
-			std::cout << boardUpdate[i][j] << " | ";
+			std::cout << " " << boardUpdate[i][j] << " " << std::string(1, char(186));
 		}
-		std::cout << "\n|---|---|---|\n";
+		if(i == ROW_SIZE - 1)
+		{ 
+			std::cout << std::endl << std::string(1, char(200)) << std::string(3, char(205)) << std::string(1, char(202)) << std::string(3, char(205)) << std::string(1, char(202)) << std::string(3, char(205)) << std::string(1, char(188)) << std::endl;
+		}
+		else
+		{
+			std::cout << std::endl << std::string(1, char(204)) << std::string(3, char(205)) << std::string(1, char(206)) << std::string(3, char(205)) << std::string(1, char(206)) << std::string(3, char(205)) << std::string(1, char(185)) << std::endl;
+		}
 	}
 
 	std::cout << "\n\n";
