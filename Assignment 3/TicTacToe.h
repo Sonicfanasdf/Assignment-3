@@ -1,12 +1,13 @@
 #pragma once
 #include <iostream>
+#include <iomanip>
 #include <chrono>
+
 
 static const int ROW_SIZE = 3;
 static const int COL_SIZE = 3;
 
-std::chrono::steady_clock::time_point start;
-std::chrono::steady_clock::time_point end;
+
 
 
 int inputInteger(std::string prompt, int startRange, int endRange);
@@ -29,12 +30,12 @@ public:
 	int getColumn() const;
 	void setColumn(int newColumn);
 	void ticTacToe();
-	void makeMove(char playerSymbol);
+	void makeMove(char playerSymbol, int& moves);
 	void updateBoard();
 	bool checkWin(char playerSymbol);
 	bool checkDraw();
 	void initRandom();
 	void computerMove(char playerSymbol);
 	void resetBoard();
-	void gameStatistics();
+	void gameStatistics(double fastTime, int fastTimeMoves, double longTime, int longTimeMoves, double sum);
 };

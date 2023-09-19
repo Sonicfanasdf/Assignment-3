@@ -57,8 +57,19 @@ void TicTacToe::ticTacToe()
 {
 	char currentPlayer = 'X'; // Start with player X
 	char option = '\0';
+	double gameDuration = 0;
+	double fastTime = 0;
+	double longTime = 0;
+	int longTimeMoves = 0;
+	int fastTimeMoves = 0;
+	double sum = 0;
+	int moves = 0;
+
+	std::chrono::steady_clock::time_point start;
+	std::chrono::steady_clock::time_point end;
 
 	initRandom(); // Initialize random number generator
+
 
 	std::cout << "Tic-tac-toe (also known as Noughts and crosses or Xs and Os) is a game for two\n";
 	std::cout << "players, X and O, who take turns marking the spaces in a 3x3 grid.The player who\n";
@@ -70,6 +81,8 @@ void TicTacToe::ticTacToe()
 	std::cout << "Game begins ...\n";
 	do
 	{
+		moves = 0;
+		
 		start = std::chrono::steady_clock::now();
 
 	std::cout << "\n\n";
@@ -89,7 +102,7 @@ void TicTacToe::ticTacToe()
 
 			
 			if (currentPlayer == 'X') {
-				makeMove(currentPlayer);
+				makeMove(currentPlayer, moves);
 			}
 			else {
 				computerMove(currentPlayer);
@@ -120,15 +133,43 @@ void TicTacToe::ticTacToe()
 		}
 		end = std::chrono::steady_clock::now();
 		option = inputChar("Play again ? (Y - yes or N - no)", "YN");
+	std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+	gameDuration = duration.count();
+
+	sum += gameDuration;
+
+	if (gamesPlayed == 1)
+	{
+		fastTime = gameDuration;
+		longTime = gameDuration;
+		fastTimeMoves = moves;
+		longTimeMoves = moves;
+	}
+	else if (gameDuration < fastTime)
+	{
+		fastTime = gameDuration;
+		fastTimeMoves = moves;
+	
+	}
+	else if (gameDuration > longTime)
+	{
+		longTime = gameDuration;
+		longTimeMoves = moves;
+	}
+
 	} while (option == 'Y');
 
-	gameStatistics();
+	//std::cout << std::fixed << std::setprecision(1) << gameDuration << " seconds" << std::endl;
+
+	//std::cout << fastTime << " " << longTime << " " << sum << std::endl;
+
+	gameStatistics(fastTime, fastTimeMoves, longTime, longTimeMoves, sum);
 	system("pause");
 	system("cls");
 	mainMenu();
 }
 
-void TicTacToe::makeMove(char playerSymbol)
+void TicTacToe::makeMove(char playerSymbol, int& moves)
 {
 	std::cout << "Human moves ...\n\n";
 
@@ -165,6 +206,8 @@ void TicTacToe::makeMove(char playerSymbol)
 	}
 
 	updateBoard();
+
+	moves++;
 }
 
 void TicTacToe::updateBoard()
@@ -243,6 +286,7 @@ void TicTacToe::computerMove(char playerSymbol)
 	} while (boardUpdate[row][col] != ' '); // Keep generating until an empty spot is found
 
 	boardUpdate[row][col] = playerSymbol;
+
 }
 
 void TicTacToe::resetBoard()
@@ -254,9 +298,17 @@ void TicTacToe::resetBoard()
 	}
 }
 
-void TicTacToe::gameStatistics()
+void TicTacToe::gameStatistics(double fastTime, int fastTimeMoves, double longTime, int longTimeMoves, double sum)
 {
-	// Print the number of games played
-	std::cout << "Games played: " << gamesPlayed << std::endl;
+	double mean = 0;
 
+	std::cout << std::endl;
+
+	mean = sum / gamesPlayed;
+	// Print the number of games played
+	std::cout << "Game statistics: \n\n";
+	std::cout << gamesPlayed << " games using of Tic-Tac-Toe were played.\n";
+	std::cout << std::fixed << std::setprecision(0) << "\tThe fastest time was " << fastTime << " seconds in " << fastTimeMoves << " moves.\n";
+	std::cout << std::fixed << std::setprecision(0) << "\tThe slowest time was " << longTime << " seconds in " << longTimeMoves << " moves.\n";
+	std::cout << std::fixed << std::setprecision(1) << "\tThe average time was " << mean << " second(s).\n\n";
 }
