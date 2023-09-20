@@ -82,6 +82,7 @@ void TicTacToe::ticTacToe()
 	do
 	{
 		moves = 0;
+		currentPlayer = 'X';
 		
 		start = std::chrono::steady_clock::now();
 
@@ -99,7 +100,7 @@ void TicTacToe::ticTacToe()
 
 		while (true)
 		{
-
+			
 			
 			if (currentPlayer == 'X') {
 				makeMove(currentPlayer, moves);
